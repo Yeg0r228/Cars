@@ -73,11 +73,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const images = structuredData[brand][model][year];
         images.forEach(src => {
-            const img = document.createElement('img');
+            const img = new Image();
             img.src = src;
             img.alt = `${brand} ${model} ${year}`;
-            img.classList.add('car-image');
-            imageGallery.appendChild(img);
+            img.onload = () => {
+                // Перевірка розмірів зображення
+                if (img.width > 1 && img.height > 1) {
+                    img.classList.add('car-image');
+                    imageGallery.appendChild(img);
+                }
+            };
+            img.onerror = () => {
+                console.warn(`Image failed to load: ${src}`);
+            };
         });
     };
 });
