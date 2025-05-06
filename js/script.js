@@ -78,13 +78,15 @@ document.addEventListener('DOMContentLoaded', () => {
             img.alt = `${brand} ${model} ${year}`;
             img.onload = () => {
                 // Перевірка розмірів зображення
-                if (img.width > 1 && img.height > 1) {
+                if (img.naturalWidth > 1 && img.naturalHeight > 1) {
                     img.classList.add('car-image');
-                    imageGallery.appendChild(img);
+                    imageGallery.appendChild(img); // Додаємо тільки валідні зображення
+                } else {
+                    console.warn(`Image skipped due to invalid dimensions: ${src}`);
                 }
             };
             img.onerror = () => {
-                console.warn(`Image failed to load: ${src}`);
+                console.warn(`Image failed to load: ${src}`); // Лог помилки завантаження
             };
         });
     };
