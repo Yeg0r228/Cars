@@ -90,4 +90,51 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         });
     };
+
+    // Додавання обробника подій кліка до галереї зображень
+    imageGallery.addEventListener('click', (event) => {
+        if (event.target.tagName === 'IMG') {
+            openFullscreen(event.target.src);
+        }
+    });
+
+    function openFullscreen(imageSrc) {
+        const images = Array.from(imageGallery.querySelectorAll('img'));
+        let currentImageIndex = images.findIndex(img => img.src === imageSrc);
+
+        const fullscreenDiv = document.createElement('div');
+        fullscreenDiv.classList.add('fullscreen');
+
+        const fullscreenImage = document.createElement('img');
+        fullscreenImage.src = imageSrc;
+
+        const closeButton = document.createElement('button');
+        closeButton.classList.add('fullscreen-close');
+        closeButton.innerHTML = '&times;';
+        closeButton.addEventListener('click', () => {
+            document.body.removeChild(fullscreenDiv);
+        });
+
+        const prevButton = document.createElement('button');
+        prevButton.classList.add('fullscreen-button', 'left');
+        prevButton.setAttribute('data-arrow', '◀'); // Ліва стрілка
+        prevButton.addEventListener('click', () => {
+            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+            fullscreenImage.src = images[currentImageIndex].src;
+        });
+
+        const nextButton = document.createElement('button');
+        nextButton.classList.add('fullscreen-button', 'right');
+        nextButton.setAttribute('data-arrow', '▶'); // Права стрілка
+        nextButton.addEventListener('click', () => {
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            fullscreenImage.src = images[currentImageIndex].src;
+        });
+
+        fullscreenDiv.appendChild(fullscreenImage);
+        fullscreenDiv.appendChild(closeButton);
+        fullscreenDiv.appendChild(prevButton);
+        fullscreenDiv.appendChild(nextButton);
+        document.body.appendChild(fullscreenDiv);
+    }
 });
